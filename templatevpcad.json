@@ -559,7 +559,7 @@
                     "Fn::If": [
                         "NATInstanceCondition",
                         {
-                            "Ref": "NATInstance2"
+                            "Ref": "NATInstance1"
                         },
                         {
                             "Ref": "AWS::NoValue"
@@ -570,7 +570,7 @@
                     "Fn::If": [
                         "NATGatewayCondition",
                         {
-                            "Ref": "NATGateway2"
+                            "Ref": "NATGateway1"
                         },
                         {
                             "Ref": "AWS::NoValue"
@@ -622,7 +622,7 @@
                     "Fn::If": [
                         "NATInstanceCondition",
                         {
-                            "Ref": "NATInstance3"
+                            "Ref": "NATInstance1"
                         },
                         {
                             "Ref": "AWS::NoValue"
@@ -633,7 +633,7 @@
                     "Fn::If": [
                         "NATGatewayCondition",
                         {
-                            "Ref": "NATGateway3"
+                            "Ref": "NATGateway1"
                         },
                         {
                             "Ref": "AWS::NoValue"
