@@ -734,25 +734,6 @@
                 }
             }
         },
-        "NAT3EIP": {
-            "Condition": "PrivateSubnets&3AZCondition",
-            "DependsOn": "VPCGatewayAttachment",
-            "Type": "AWS::EC2::EIP",
-            "Properties": {
-                "Domain": "vpc",
-                "InstanceId": {
-                    "Fn::If": [
-                        "NATInstanceCondition",
-                        {
-                            "Ref": "NATInstance3"
-                        },
-                        {
-                            "Ref": "AWS::NoValue"
-                        }
-                    ]
-                }
-            }
-        },
         "NATGateway1": {
             "Condition": "NATGatewayCondition",
             "DependsOn": "VPCGatewayAttachment",
@@ -915,18 +896,6 @@
             "Export": {
                 "Name": {
                     "Fn::Sub": "${AWS::StackName}-NAT2EIP"
-                }
-            }
-        },
-        "NAT3EIP": {
-            "Condition": "PrivateSubnets&3AZCondition",
-            "Description": "NAT 3 IP address",
-            "Value": {
-                "Ref": "NAT3EIP"
-            },
-            "Export": {
-                "Name": {
-                    "Fn::Sub": "${AWS::StackName}-NAT3EIP"
                 }
             }
         },
