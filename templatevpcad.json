@@ -40,9 +40,6 @@
                 "AvailabilityZones": {
                     "default": "Availability Zones"
                 },
-                "CreateAdditionalPrivateSubnets": {
-                    "default": "Create additional private subnets with dedicated network ACLs"
-                },
                 "CreatePrivateSubnets": {
                     "default": "Create private subnets"
                 },
@@ -78,6 +75,15 @@
             "Description": "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved.",
             "Type": "List<AWS::EC2::AvailabilityZone::Name>"
         },
+        "CreatePrivateSubnets": {
+            "AllowedValues": [
+                "true",
+                "false"
+            ],
+            "Default": "true",
+            "Description": "Set to false to create only public subnets. If false, the CIDR parameters for ALL private subnets will be ignored.",
+            "Type": "String"
+        },
         "KeyPairName": {
             "Description": "Public/private key pairs allow you to securely connect to your NAT instance after it launches. This is used only if the region does not support NAT gateways.",
             "Type": "AWS::EC2::KeyPair::KeyName"
@@ -109,29 +115,22 @@
         "PrivateSubnet1ACIDR": {
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
             "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-            "Default": "10.0.0.0/19",
+            "Default": "10.0.1.0/24",
             "Description": "CIDR block for private subnet 1A located in Availability Zone 1",
             "Type": "String"
         },
         "PrivateSubnet2ACIDR": {
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
             "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-            "Default": "10.0.32.0/19",
+            "Default": "10.0.2.0/24",
             "Description": "CIDR block for private subnet 2A located in Availability Zone 2",
             "Type": "String"
         },
         "PrivateSubnet3ACIDR": {
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
             "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-            "Default": "10.0.64.0/19",
+            "Default": "10.0.3.0/24",
             "Description": "CIDR block for private subnet 3A located in Availability Zone 3",
-            "Type": "String"
-        },
-        "PrivateSubnet4ACIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-            "Default": "10.0.96.0/19",
-            "Description": "CIDR block for private subnet 4A located in Availability Zone 4",
             "Type": "String"
         },
         "PublicSubnet1CIDR": {
@@ -174,6 +173,14 @@
                     "Ref": "AWS::Region"
                 },
                 "us-gov-west-1"
+            ]
+        },
+        "PrivateSubnetsCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "CreatePrivateSubnets"
+                },
+                "true"
             ]
         },
         "NATInstanceCondition": {
@@ -228,14 +235,6 @@
                 "us-east-1"
             ]
         },
-        "PrivateSubnetsCondition": {
-            "Fn::Equals": [
-                {
-                    "Ref": "CreatePrivateSubnets"
-                },
-                "true"
-            ]
-        },
         "PrivateSubnets&3AZCondition": {
             "Fn::And": [
                 {
@@ -285,7 +284,7 @@
                 "CidrBlock": {
                     "Ref": "VPCCIDR"
                 },
-                "InstanceTenancy": "Default",
+                "InstanceTenancy": "default",
                 "EnableDnsSupport": "true",
                 "EnableDnsHostnames": "true",
                 "Tags": [
