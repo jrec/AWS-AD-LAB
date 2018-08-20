@@ -180,18 +180,11 @@
     },
     "Conditions": {
         "3AZCondition": {
-            "Fn::Or": [
+            "Fn::Equals": [
                 {
-                    "Fn::Equals": [
-                        {
-                            "Ref": "NumberOfAZs"
-                        },
-                        "3"
-                    ]
+                    "Ref": "NumberOfAZs"
                 },
-                {
-                    "Condition": "4AZCondition"
-                }
+                "3"
             ]
         },
         "GovCloudCondition": {
